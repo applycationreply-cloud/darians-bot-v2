@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import { Collection } from 'discord.js';
 import { logger } from '../utils/logger.js';
+import { translateCommandData } from '../utils/localization.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,6 +89,8 @@ export async function loadCommands(client) {
                 logger.warn(`Command at ${filePath} is missing required "data" or "execute" property.`);
                 continue;
             }
+
+            translateCommandData(command.data);
             
             command.category = category;
             command.filePath = normalizedPath;

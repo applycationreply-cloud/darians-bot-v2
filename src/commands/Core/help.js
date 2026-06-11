@@ -55,8 +55,8 @@ export async function createInitialHelpMenu(client) {
 
     const options = [
         {
-            label: "📋 All Commands",
-            description: "View all available commands with pagination",
+            label: "📋 Alle Befehle",
+            description: "Zeige alle verfügbaren Befehle mit Seiten",
             value: ALL_COMMANDS_ID,
         },
         ...categoryDirs.map((category) => {
@@ -66,7 +66,7 @@ export async function createInitialHelpMenu(client) {
             const icon = CATEGORY_ICONS[categoryName] || "🔍";
             return {
                 label: `${icon} ${categoryName}`,
-                description: `View commands in the ${categoryName} category`,
+                description: `Zeigt die Befehle der Kategorie ${categoryName} an`,
                 value: category,
             };
         }),
@@ -74,112 +74,112 @@ export async function createInitialHelpMenu(client) {
 
     const botName = client?.user?.username || "Bot";
     const embed = createEmbed({ 
-        title: `🤖 ${botName} Help Center`,
-        description: "Your all-in-one Discord companion for moderation, economy, fun, and server management.",
+        title: `🤖 ${botName} Hilfezentrum`,
+        description: "Dein vielseitiger Discord-Bot für Moderation, Wirtschaft, Spaß und Serververwaltung.",
         color: 'primary'
     });
 
     embed.addFields(
         {
             name: "🛡️ **Moderation**",
-            value: "Server moderation, user management, and enforcement tools",
+            value: "Servermoderation, Benutzerverwaltung und Durchsetzungstools",
             inline: true
         },
         {
             name: "💰 **Economy**",
-            value: "Currency system, shops, and virtual economy",
+            value: "Währungssystem, Shops und virtuelle Wirtschaft",
             inline: true
         },
         {
             name: "🎮 **Fun**",
-            value: "Games, entertainment, and interactive commands",
+            value: "Spiele, Unterhaltung und interaktive Befehle",
             inline: true
         },
         {
             name: "📊 **Leveling**",
-            value: "User levels, XP system, and progression tracking",
+            value: "Benutzerlevel, XP-System und Fortschrittsverfolgung",
             inline: true
         },
         {
             name: "🎫 **Tickets**",
-            value: "Support ticket system for server management",
+            value: "Support-Ticket-System für Serververwaltung",
             inline: true
         },
         {
             name: "🎉 **Giveaways**",
-            value: "Automated giveaway management and distribution",
+            value: "Automatisierte Giveaway-Verwaltung und Verteilung",
             inline: true
         },
         {
             name: "👋 **Welcome**",
-            value: "Member welcome messages and onboarding",
+            value: "Mitgliederbegrüßung und Onboarding",
             inline: true
         },
         {
             name: "🎂 **Birthdays**",
-            value: "Birthday tracking and celebration features",
+            value: "Geburtstagsüberwachung und Feierfunktionen",
             inline: true
         },
         {
             name: "👥 **Community**",
-            value: "Community tools, applications, and member engagement",
+            value: "Community-Tools, Bewerbungen und Mitgliedereinbindung",
             inline: true
         },
         {
             name: "⚙️ **Config**",
-            value: "Server and bot configuration management commands",
+            value: "Server- und Bot-Konfigurationsverwaltung",
             inline: true
         },
         {
             name: "🔢 **Counter**",
-            value: "Live counter channel setup and counter controls",
+            value: "Live-Zählerkanal-Erstellung und Steuerung",
             inline: true
         },
         {
             name: "🎙️ **Join to Create**",
-            value: "Dynamic voice channel creation and management",
+            value: "Dynamische Sprachkanalerstellung und -verwaltung",
             inline: true
         },
         {
             name: "🎭 **Reaction Roles**",
-            value: "Self-assignable roles using reaction-role systems",
+            value: "Selbstzuweisbare Rollen mit Reaktionsrollen",
             inline: true
         },
         {
             name: "✅ **Verification**",
-            value: "Member verification workflows and access gating",
+            value: "Mitgliederverifizierung und Zugangskontrolle",
             inline: true
         },
         {
             name: "🔧 **Utilities**",
-            value: "Useful tools and server utilities",
+            value: "Nützliche Werkzeuge und Serverhilfen",
             inline: true
         }
     );
 
     embed.setFooter({ 
-        text: "Made with ❤️" 
+        text: "Titan Bot" 
     });
     embed.setTimestamp();
 
     const bugReportButton = new ButtonBuilder()
         .setCustomId(BUG_REPORT_BUTTON_ID)
-        .setLabel("Report Bug")
+        .setLabel("Fehler melden")
         .setStyle(ButtonStyle.Danger);
 
     const supportButton = new ButtonBuilder()
-        .setLabel("Support Server")
+        .setLabel("Support-Server")
         .setURL("https://discord.gg/QnWNz2dKCE")
         .setStyle(ButtonStyle.Link);
 
     const touchpointButton = new ButtonBuilder()
-        .setLabel("Learn from Touchpoint")
+        .setLabel("Mehr erfahren")
         .setURL("https://www.youtube.com/@TouchDisc")
         .setStyle(ButtonStyle.Link);
 
     const selectRow = createSelectMenu(
         CATEGORY_SELECT_ID,
-        "Select to view the commands",
+        "Wähle, um die Befehle anzuzeigen",
         options,
     );
 
@@ -198,7 +198,7 @@ export async function createInitialHelpMenu(client) {
 export default {
     data: new SlashCommandBuilder()
         .setName("help")
-        .setDescription("Displays the help menu with all available commands"),
+        .setDescription("Zeigt das Hilfemenü mit allen verfügbaren Befehlen an"),
 
     async execute(interaction, guildConfig, client) {
         
@@ -215,8 +215,8 @@ export default {
         setTimeout(async () => {
             try {
                 const closedEmbed = createEmbed({
-                    title: "Help menu closed",
-                    description: "Help menu has been closed, use /help again.",
+                    title: "Hilfemenü geschlossen",
+                    description: "Das Hilfemenü wurde geschlossen. Verwende /help erneut.",
                     color: "secondary",
                 });
 

@@ -42,25 +42,25 @@ export const helpBugReportButton = {
     name: BUG_REPORT_BUTTON_ID,
     async execute(interaction, client) {
         const githubButton = new ButtonBuilder()
-            .setLabel('🐛 Report Bug on GitHub')
+            .setLabel('🐛 Melde einen Fehler auf GitHub')
             .setStyle(ButtonStyle.Link)
             .setURL('https://github.com/codebymitch/TitanBot/issues');
 
         const bugRow = new ActionRowBuilder().addComponents(githubButton);
 
         const bugReportEmbed = createEmbed({
-            title: '🐛 Bug Report',
-            description: 'Found a bug? Please report it on our GitHub Issues page!\n\n' +
-                '**When reporting a bug, please include:**\n' +
-                '• 📝 Detailed description of the issue\n' +
-                '• 📋 Steps to reproduce the problem\n' +
-                '• 📸 Screenshots if applicable\n' +
-                '• 💻 Your bot version and environment\n\n' +
-                'This helps us fix issues faster and more effectively!',
+            title: '🐛 Fehler melden',
+            description: 'Hast du einen Fehler gefunden? Melde ihn bitte auf unserer GitHub-Issue-Seite!\n\n' +
+                '**Bitte gib beim Melden eines Fehlers an:**\n' +
+                '• 📝 Eine detaillierte Beschreibung des Problems\n' +
+                '• 📋 Schritte zur Reproduktion\n' +
+                '• 📸 Screenshots, falls vorhanden\n' +
+                '• 💻 Deine Bot-Version und Umgebung\n\n' +
+                'Das hilft uns, Probleme schneller und effizienter zu beheben!',
             color: 'error'
         });
         bugReportEmbed.setFooter({
-            text: 'TitanBot Bug Reporting System',
+            text: 'TitanBot Fehlerberichtssystem',
             iconURL: client.user.displayAvatarURL()
         });
         bugReportEmbed.setTimestamp();
@@ -86,7 +86,7 @@ function getPaginationInfo(components) {
         for (const component of row.components || []) {
             if (component.customId === `${PAGINATION_PREFIX}_page`) {
                 const label = component.label || '';
-                const match = label.match(/Page\s+(\d+)\s+of\s+(\d+)/i);
+                const match = label.match(/(?:Page|Seite)\s+(\d+)\s+(?:of|von)\s+(\d+)/i);
                 if (match) {
                     return {
                         currentPage: Number(match[1]),

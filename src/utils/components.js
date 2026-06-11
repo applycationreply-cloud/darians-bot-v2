@@ -30,7 +30,7 @@ export function getPaginationRow(customIdPrefix = 'page', currentPage = 1, total
             .setDisabled(currentPage === 1),
         new ButtonBuilder()
             .setCustomId(`${customIdPrefix}_page`)
-            .setLabel(`Page ${currentPage} of ${totalPages}`)
+            .setLabel(`Seite ${currentPage} von ${totalPages}`)
             .setStyle(ButtonStyle.Secondary)
             .setDisabled(true),
         new ButtonBuilder()

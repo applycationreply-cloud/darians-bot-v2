@@ -42,6 +42,39 @@ class TitanBot extends Client {
     this.cooldowns = new Collection();
     this.db = null;
     this.rest = new REST({ version: '10' }).setToken(config.bot.token);
+    this.presenceActivities = [
+      'deine Server und zufällige Memes',
+      'wie der Kaffee kocht',
+      'die Anzahl toller Mitglieder',
+      'geheime Bot-Pläne',
+      'die letzten Katzenbilder',
+      'den Serverstatus',
+      'die Uhrzeit der Pizza',
+      'Witze über Moderatoren',
+      'die Kaffeemaschine',
+      'die Sterne am Himmel'
+    ];
+  }
+
+  updatePresence() {
+    if (!this.user) return;
+    const choice = this.presenceActivities[
+      Math.floor(Math.random() * this.presenceActivities.length)
+    ];
+
+    try {
+      this.user.setPresence({
+        status: 'online',
+        activities: [
+          {
+            name: choice,
+            type: 3,
+          },
+        ],
+      });
+    } catch (error) {
+      logger.error('Failed to update bot presence:', error);
+    }
   }
 
   async start() {
@@ -83,6 +116,7 @@ class TitanBot extends Client {
       startupLog('Logging into Discord...');
       await this.login(this.config.bot.token);
       startupLog('Discord login successful');
+      this.updatePresence();
       
       startupLog('Registering slash commands...');
       await this.registerCommands();
@@ -230,6 +264,7 @@ class TitanBot extends Client {
   setupCronJobs() {
     cron.schedule('0 6 * * *', () => checkBirthdays(this));
     cron.schedule('* * * * *', () => checkGiveaways(this));
+    cron.schedule('* * * * *', () => this.updatePresence());
     cron.schedule('*/15 * * * *', () => this.updateAllCounters());
   }
 

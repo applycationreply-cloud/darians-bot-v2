@@ -9,7 +9,11 @@ export default {
 
   async execute(client) {
     try {
-      client.user.setPresence(config.bot.presence);
+      if (typeof client.updatePresence === 'function') {
+        client.updatePresence();
+      } else {
+        client.user.setPresence(config.bot.presence);
+      }
 
       startupLog(`Ready! Logged in as ${client.user.tag}`);
       startupLog(`Serving ${client.guilds.cache.size} guild(s)`);
