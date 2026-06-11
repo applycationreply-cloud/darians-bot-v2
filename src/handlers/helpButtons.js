@@ -42,9 +42,9 @@ export const helpBugReportButton = {
     name: BUG_REPORT_BUTTON_ID,
     async execute(interaction, client) {
         const githubButton = new ButtonBuilder()
-            .setLabel('🐛 Melde einen Fehler auf GitHub')
+            .setLabel('🐛 Melde einen Fehler')
             .setStyle(ButtonStyle.Link)
-            .setURL('https://github.com/codebymitch/TitanBot/issues');
+            .setURL('https://discord.gg/x8uVW3wK34');
 
         const bugRow = new ActionRowBuilder().addComponents(githubButton);
 
@@ -60,7 +60,7 @@ export const helpBugReportButton = {
             color: 'error'
         });
         bugReportEmbed.setFooter({
-            text: 'TitanBot Fehlerberichtssystem',
+            text: 'Darians Bot Fehlerberichtssystem',
             iconURL: client.user.displayAvatarURL()
         });
         bugReportEmbed.setTimestamp();

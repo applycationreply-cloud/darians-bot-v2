@@ -104,9 +104,9 @@ async function run() {
 
   const outputPath = args.output
     ? path.resolve(args.output)
-    : path.join(backupDir, `titanbot-backup-${createTimestamp()}.dump`);
+    : path.join(backupDir, `darians-bot-backup-${createTimestamp()}.dump`);
 
-  const dumpArgs = [
+  const dumpArgs = [ 
     '--format=custom',
     '--no-owner',
     '--no-privileges',

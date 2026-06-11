@@ -5,25 +5,25 @@ import { InteractionHelper } from '../../utils/interactionHelper.js';
 export default {
     data: new SlashCommandBuilder()
         .setName("bug")
-        .setDescription("Report a bug or issue with the bot"),
+        .setDescription("Meldet einen Fehler oder ein Problem mit dem Bot"),
 
     async execute(interaction) {
         const githubButton = new ButtonBuilder()
-            .setLabel('?? Report Bug on GitHub')
+            .setLabel('🐛 Melde einen Fehler')
             .setStyle(ButtonStyle.Link)
-            .setURL('https://github.com/codebymitch/TitanBot/issues');
+            .setURL('https://discord.gg/x8uVW3wK34');
 
         const row = new ActionRowBuilder().addComponents(githubButton);
 
         const bugReportEmbed = createEmbed({
-            title: '?? Bug Report',
-            description: 'Found a bug? Please report it on our GitHub Issues page!\n\n' +
-            '**When reporting a bug, please include:**\n' +
-            '� ?? Detailed description of the issue\n' +
-            '� ?? Steps to reproduce the problem\n' +
-            '� ?? Screenshots if applicable\n' +
-            '� ?? Your bot version and environment\n\n' +
-            'This helps us fix issues faster and more effectively!',
+            title: '🐛 Fehler melden',
+            description: 'Hast du einen Fehler gefunden? Bitte melde ihn auf unserer GitHub-Issue-Seite!\n\n' +
+            '**Bitte gib beim Melden eines Fehlers folgendes an:**\n' +
+            '• 📝 Eine detaillierte Beschreibung des Problems\n' +
+            '• 📋 Schritte zur Reproduktion\n' +
+            '• 📸 Screenshots, falls vorhanden\n' +
+            '• 💻 Deine Bot-Version und Umgebung\n\n' +
+            'Das hilft uns, Probleme schneller und effizienter zu beheben!',
             color: 'error'
         })
             .setTimestamp();

@@ -158,7 +158,7 @@ export async function createInitialHelpMenu(client) {
     );
 
     embed.setFooter({ 
-        text: "Titan Bot" 
+        text: "Darians Bot" 
     });
     embed.setTimestamp();
 
@@ -169,12 +169,12 @@ export async function createInitialHelpMenu(client) {
 
     const supportButton = new ButtonBuilder()
         .setLabel("Support-Server")
-        .setURL("https://discord.gg/QnWNz2dKCE")
+        .setURL("https://discord.gg/x8uVW3wK34")
         .setStyle(ButtonStyle.Link);
 
     const touchpointButton = new ButtonBuilder()
         .setLabel("Mehr erfahren")
-        .setURL("https://www.youtube.com/@TouchDisc")
+        .setURL("https://discord.gg/x8uVW3wK34")
         .setStyle(ButtonStyle.Link);
 
     const selectRow = createSelectMenu(
