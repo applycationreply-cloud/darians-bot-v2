@@ -81,13 +81,18 @@ export async function createInitialHelpMenu(client) {
 
     embed.addFields(
         {
-            name: "🛡️ **Moderation**",
-            value: "Servermoderation, Benutzerverwaltung und Durchsetzungstools",
-            inline: true
+            name: "� **Wichtige Befehle**",
+            value:
+                "`/help` — Zeigt dieses Hilfezentrum an\n" +
+                "`/support` — Support-Server und Hilfe\n" +
+                "`/uptime` — Zeigt an, wie lange der Bot online ist\n" +
+                "`/stats` — Zeigt Systemstatistiken\n" +
+                "`/allowedguilds` — Owner: verwaltet erlaubte Server\n",
+            inline: false
         },
         {
-            name: "💰 **Economy**",
-            value: "Währungssystem, Shops und virtuelle Wirtschaft",
+            name: "🛡️ **Moderation**",
+            value: "Servermoderation, Benutzerverwaltung und Durchsetzungstools",
             inline: true
         },
         {
