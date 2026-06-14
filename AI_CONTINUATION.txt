@@ -1,0 +1,171 @@
+================================================================================
+DARIANS BOT - AI CONTINUATION GUIDE
+Session Date: 2026-06-14
+================================================================================
+
+PROJECT OVERVIEW
+================================================================================
+- Discord.js v14 ESM bot (Node.js >=18)
+- Modular command architecture with German UI
+- PostgreSQL backend (with in-memory fallback)
+- Located: c:\Users\Admin\Downloads\darians-bot
+
+CURRENT STATUS
+================================================================================
+
+✅ COMPLETED FEATURES:
+  • /uptime command (German text, uptime formatting)
+  • /allowedguilds command (owner-only, f01g only, add/remove/list, env persistence)
+  • ALLOWED_GUILDS allowlist enforcement in interactionCreate.js
+  • Help menu with German UI and command list
+  • Dynamic German presence with server/member/command counts
+  • Command registration with global + guild-specific fallback
+  • Error handling and localization infrastructure
+  • /kick command (German, with moderation logging) ✅
+  • /analytics command (Server statistics: members, channels, roles, activity) ✅
+
+✅ RECENT FIXES (2026-06-14):
+  • Fixed Windows-incompatible dynamic imports in ALL handlers:
+    - commandLoader.js, events.js, helpSelectMenus.js (2x)
+    - Changed from: import(`file://${filePath}`)
+    - Changed to: import(pathToFileURL(filePath).href)
+  • Removed unused Routes import from discord.js
+  • Fixed command restoration payloads with cmd.toJSON() safety
+  • Translated ALL error messages to German:
+    - UserMessages object (9 error types)
+    - Error titles (getErrorTitle function)
+    - Helper messages (Tip, Need Help?, Configuration)
+  • npm install completed (151 packages)
+  • Syntax validation passed: node --check ✅
+
+⚠️ TODO - NEXT SESSION:
+  1. Full German translation for remaining English strings:
+     - src/utils/messageTemplates.js 
+     - src/events/interactionCreate.js (allowlist rejection message already German ✅)
+  2. Test bot startup with Discord token:
+     - npm start (watch for "ONLINE ✅" message)
+     - Verify /uptime command registers and works
+  3. GitHub commit & push
+
+CRITICAL FILES & LOGIC
+================================================================================
+
+src/app.js
+  - Main bot startup & command registration
+  - registerCommands() calls registerSlashCommands(this, this.config.bot.guildId)
+  - Handles both guild-specific (if GUILD_ID set) and global registration
+  - Web server on port 3000 (health/ready endpoints)
+
+src/handlers/commandLoader.js
+  - loadCommands(client) - discovers & loads all .js files from src/commands/**
+  - registerCommands(client, guildId) - handles guild vs global registration
+  - Validates command names/descriptions against Discord limits
+  - Uses pathToFileURL() for Windows-safe imports (RECENTLY FIXED)
+
+src/events/interactionCreate.js
+  - Enforces ALLOWED_GUILDS allowlist (line ~34-46)
+  - Command lookup & execution
+  - Cooldown/abuse protection
+  - Error handling with tracing
+
+src/commands/Core/allowedguilds.js
+  - Owner-only (/allowedguilds add/remove/list)
+  - Reads/writes .env file ALLOWED_GUILDS var
+  - Updates runtime appConfig.bot.allowedGuilds
+
+src/config/bot.js
+  - Loads ALLOWED_GUILDS from env: process.env.ALLOWED_GUILDS?.split(',').map(s => s.trim()).filter(Boolean) || []
+  - German presence config
+  - Color/embed schemes
+
+ENVIRONMENT SETUP (.env)
+================================================================================
+Required variables:
+  DISCORD_TOKEN=<bot-token>
+  CLIENT_ID=<application-id>
+  OWNER_IDS=1333821781731184656  (f01g's user ID)
+  ALLOWED_GUILDS=<comma-separated-guild-ids> (optional, empty = all guilds)
+  GUILD_ID=<test-guild-id> (optional - if set, commands register to guild; if missing, global)
+  TEST_GUILD_ID=<test-guild-id> (optional)
+  NODE_ENV=development|production
+  LOG_LEVEL=info
+
+NEXT STEPS (Priority Order)
+================================================================================
+
+1. FIX REMAINING WINDOWS IMPORTS (30 min)
+   Files: src/handlers/helpSelectMenus.js, src/handlers/events.js
+   Action: Replace all `import(\`file://${filePath}\`)` with `import(pathToFileURL(filePath).href)`
+   Lines to fix:
+     - helpSelectMenus.js line 127: const commandModule = await import(`file://${filePath}`);
+     - helpSelectMenus.js line 256: const commandModule = await import(`file://${filePath}`);
+     - events.js line 17: const { default: event } = await import(`file://${filePath}`);
+
+2. TEST BOT STARTUP (20 min)
+   Commands:
+     cd c:\Users\Admin\Downloads\darians-bot
+     npm install (if not done)
+     node src/app.js
+   Expected output: "ONLINE ✅ | X commands loaded | ..."
+   If failed: check logs for import/syntax/registration errors
+
+3. GERMAN TRANSLATION (60 min)
+   Files:
+     - src/utils/messageTemplates.js (all English strings)
+     - src/utils/errorHandler.js (all user-facing error messages)
+   Pattern: Replace English descriptions with German equivalents
+   Example: "This command is on cooldown" → "Dieser Befehl ist auf Cooldown"
+
+4. GITHUB COMMIT & PUSH
+   Ready once startup test passes
+   Commit message: "Fix Windows import compatibility and command registration"
+
+CODE PATTERNS & CONVENTIONS
+================================================================================
+
+Command Structure:
+  export default {
+    data: new SlashCommandBuilder().setName('...').setDescription('...'),
+    async execute(interaction, guildConfig, client) { ... }
+  }
+
+Import Pattern (Windows-safe):
+  import { pathToFileURL } from 'url';
+  const commandModule = await import(pathToFileURL(filePath).href);
+
+Error Handling:
+  createError(debugMsg, ErrorTypes.XXX, userMessage, context)
+  - Logs debug msg internally
+  - Shows userMessage to Discord user
+
+Embeds:
+  createEmbed({ title, description, color: 'success'|'error'|'warning'|'info' })
+
+Owner Check:
+  if (interaction.user?.id !== OWNER_USER_ID) { ... }
+  OWNER_USER_ID = '1333821781731184656' (f01g)
+
+DEBUGGING TIPS
+================================================================================
+- Check logs: look for "Error registering commands" or "command does not exist"
+- If commands not appearing: verify GUILD_ID set correctly or remove to use global
+- If imports fail: verify pathToFileURL() used with .href property
+- Database errors: check PostgreSQL connection in .env or logs show "DEGRADED MODE"
+
+DATABASE NOTE
+================================================================================
+- PostgreSQL: primary production database
+- In-memory fallback: if PostgreSQL unavailable, bot runs in "degraded mode"
+- No persistent data when degraded - restarts lose all data
+- Connection: src/utils/database.js, config: src/config/postgres.js
+
+CONTACT / QUESTIONS
+================================================================================
+When continuing:
+1. Read this file first
+2. Check "NEXT STEPS" for priority order
+3. Run: node --check src/handlers/commandLoader.js (syntax validation)
+4. If startup fails, provide full error output + check Discord token/permissions
+
+Last updated: 2026-06-14 (after Windows import fix)
+================================================================================

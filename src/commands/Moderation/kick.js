@@ -8,15 +8,15 @@ import { TitanBotError, ErrorTypes } from '../../utils/errorHandler.js';
 export default {
     data: new SlashCommandBuilder()
     .setName("kick")
-    .setDescription("Kick a user from the server")
+    .setDescription("Entferne einen Benutzer vom Server")
     .addUserOption((option) =>
       option
         .setName("target")
-        .setDescription("The user to kick")
+        .setDescription("Der Benutzer, der gekickt werden soll")
         .setRequired(true),
     )
     .addStringOption((option) =>
-      option.setName("reason").setDescription("Reason for the kick"),
+      option.setName("reason").setDescription("Grund für den Kick"),
     )
 .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers),
   category: "moderation",
@@ -28,20 +28,20 @@ export default {
         throw new TitanBotError(
           "User lacks permission",
           ErrorTypes.PERMISSION,
-          "You do not have permission to kick members."
+          "Du hast keine Berechtigung, Mitglieder zu kicken."
         );
       }
 
       const targetUser = interaction.options.getUser("target");
       const member = interaction.options.getMember("target");
-      const reason = interaction.options.getString("reason") || "No reason provided";
+      const reason = interaction.options.getString("reason") || "Kein Grund angegeben";
 
       
       if (targetUser.id === interaction.user.id) {
         throw new TitanBotError(
           "Cannot kick self",
           ErrorTypes.VALIDATION,
-          "You cannot kick yourself."
+          "Du kannst dich selbst nicht kicken."
         );
       }
 
@@ -50,7 +50,7 @@ export default {
         throw new TitanBotError(
           "Cannot kick bot",
           ErrorTypes.VALIDATION,
-          "You cannot kick the bot."
+          "Du kannst den Bot nicht kicken."
         );
       }
 
@@ -59,7 +59,7 @@ export default {
         throw new TitanBotError(
           "Target not found",
           ErrorTypes.USER_INPUT,
-          "The target user is not currently in this server.",
+          "Der Benutzer ist nicht auf diesem Server.",
           { subtype: 'user_not_found' }
         );
       }
@@ -69,7 +69,7 @@ export default {
         throw new TitanBotError(
           "Cannot kick user",
           ErrorTypes.PERMISSION,
-          "You cannot kick a user with an equal or higher role than you."
+          "Du kannst einen Benutzer mit einer gleichen oder höheren Rolle nicht kicken."
         );
       }
 
@@ -78,7 +78,7 @@ export default {
         throw new TitanBotError(
           "Bot cannot kick",
           ErrorTypes.PERMISSION,
-          "I cannot kick this user. Please check my role position relative to the target user."
+          "Ich kann diesen Benutzer nicht kicken. Überprüfe meine Rollenposition."
         );
       }
 
@@ -105,16 +105,16 @@ export default {
       await InteractionHelper.universalReply(interaction, {
         embeds: [
           successEmbed(
-            `👢 **Kicked** ${targetUser.tag}`,
-            `**Reason:** ${reason}\n**Case ID:** #${caseId}`,
+            `👢 **${targetUser.tag} gekickt**`,
+            `**Grund:** ${reason}\n**Case ID:** #${caseId}`,
           ),
         ],
       });
     } catch (error) {
       logger.error('Kick command error:', error);
       const errorEmbed_default = errorEmbed(
-        "An unexpected error occurred while trying to kick the user.",
-        error.message || "Could not kick the user"
+        "Es ist ein Fehler beim Kicken des Benutzers aufgetreten.",
+        error.message || "Konnte den Benutzer nicht kicken"
       );
       await InteractionHelper.universalReply(interaction, { embeds: [errorEmbed_default] });
     }
