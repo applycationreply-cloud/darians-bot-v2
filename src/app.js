@@ -43,31 +43,31 @@ class DariansBot extends Client {
     this.db = null;
     this.rest = new REST({ version: '10' }).setToken(config.bot.token);
     this.presenceActivities = [
-      'deine Server und zufällige Memes',
-      'wie der Kaffee kocht',
-      'die Anzahl toller Mitglieder',
-      'geheime Bot-Pläne',
-      'die letzten Katzenbilder',
-      'den Serverstatus',
-      'die Uhrzeit der Pizza',
-      'Witze über Moderatoren',
-      'die Kaffeemaschine',
-      'die Sterne am Himmel'
+      // Dynamic presence messages — functions will be evaluated at runtime
+      function () { return `auf ${this.guilds.cache.size} Servern`; },
+      function () { return `${this.commands.size} Befehle verfügbar`; },
+      function () {
+        const members = this.guilds.cache.reduce((acc, g) => acc + (g.memberCount || 0), 0);
+        return `für ${members} Mitglieder`; 
+      },
+      function () { return `Status: ${this.guilds.cache.size} Server online`; },
+      // Fallback static messages
+      'auf mehreren Servern aktiv',
+      'bereit für deine Befehle'
     ];
   }
 
   updatePresence() {
     if (!this.user) return;
-    const choice = this.presenceActivities[
-      Math.floor(Math.random() * this.presenceActivities.length)
-    ];
-
     try {
+      const raw = this.presenceActivities[Math.floor(Math.random() * this.presenceActivities.length)];
+      const name = typeof raw === 'function' ? raw.call(this) : raw;
+
       this.user.setPresence({
         status: 'online',
         activities: [
           {
-            name: choice,
+            name: name,
             type: 3,
           },
         ],
