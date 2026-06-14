@@ -50,6 +50,10 @@ export const botConfig = {
     testGuildId: process.env.TEST_GUILD_ID,
   },
 
+  // Optional allow-list of guild IDs (comma-separated in ALLOWED_GUILDS env var).
+  // If non-empty, the bot will only operate in these guilds.
+  allowedGuilds: process.env.ALLOWED_GUILDS?.split(',').map(s => s.trim()).filter(Boolean) || [],
+
   // =========================
   // APPLICATIONS SYSTEM
   // =========================

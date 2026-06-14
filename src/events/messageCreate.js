@@ -5,6 +5,7 @@
 
 import { Events } from 'discord.js';
 import { logger } from '../utils/logger.js';
+import appConfig from '../config/application.js';
 import { getLevelingConfig, getUserLevelData } from '../services/leveling.js';
 import { addXp } from '../services/xpSystem.js';
 import { checkRateLimit } from '../utils/rateLimiter.js';
@@ -18,6 +19,9 @@ export default {
     try {
       
       if (message.author.bot || !message.guild) return;
+
+      const allowed = Array.isArray(appConfig.bot.allowedGuilds) ? appConfig.bot.allowedGuilds : [];
+      if (allowed.length > 0 && !allowed.includes(message.guild.id)) return;
 
       await handleLeveling(message, client);
     } catch (error) {

@@ -9,6 +9,7 @@ import { InteractionHelper } from '../utils/interactionHelper.js';
 import { createInteractionTraceContext, runWithTraceContext } from '../utils/traceContext.js';
 import { validateChatInputPayloadOrThrow } from '../utils/commandInputValidation.js';
 import { enforceAbuseProtection, formatCooldownDuration } from '../utils/abuseProtection.js';
+import appConfig from '../config/application.js';
 
 function withTraceContext(context = {}, traceContext = {}) {
   return {
@@ -30,6 +31,26 @@ export default {
     return runWithTraceContext(interactionTraceContext, async () => {
       try {
         InteractionHelper.patchInteractionResponses(interaction);
+
+        // If an allow-list is configured, block interactions from other guilds.
+        const allowed = Array.isArray(appConfig.bot.allowedGuilds) ? appConfig.bot.allowedGuilds : [];
+        if (allowed.length > 0 && interaction.guildId) {
+          if (!allowed.includes(interaction.guildId)) {
+            const replyPayload = {
+              content: 'Dieser Server ist nicht berechtigt, diesen Bot zu verwenden.',
+              flags: MessageFlags.Ephemeral
+            };
+
+            if (interaction.deferred) {
+              await interaction.editReply(replyPayload).catch(() => {});
+            } else if (interaction.replied) {
+              await interaction.followUp(replyPayload).catch(() => {});
+            } else {
+              await interaction.reply(replyPayload).catch(() => {});
+            }
+            return;
+          }
+        }
 
         if (interaction.isChatInputCommand()) {
           try {
